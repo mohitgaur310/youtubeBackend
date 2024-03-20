@@ -12,3 +12,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 module.exports = upload;
+
+//url== uniform  Resource locator
+//uri= uniform Resource identifier
+//uniform resource name
