@@ -1,10 +1,21 @@
-class ApiError extends Error {
-  statusCode;
-  constructor(statusCode, message) {
-    super(message);
-    this.statusCode = statusCode;
-    Error.captureStackTrace(this, this.constructor);
-  }
-}
+const success = (data) => {
+  if (!data) this.error();
+  return {
+    success: true,
+    result: data,
+    statusCode: 200,
+  };
+};
 
-module.exports = ApiError;
+const error = (errorCode = 404, message = null) => {
+  return {
+    success: false,
+    data: null,
+    error: {
+      code: errorCode || 404,
+      message: message || "faliure",
+    },
+  };
+};
+
+module.exports = { success, error };
