@@ -18,4 +18,5 @@ const error = (errorCode = 404, message = null) => {
   };
 };
 
-module.exports = { success, error };
+exports.success = success;
+exports.error = error;
