@@ -1,5 +1,6 @@
 const { error, success } = require("../../utils/response.js");
 const User = require("../../models/User.model.js");
+const { generateJwtToken } = require("../../utils/handler.js");
 
 const register = async (value, avatar, coverImage) => {
   const { username, email, fullname, password } = value;
@@ -19,11 +20,16 @@ const register = async (value, avatar, coverImage) => {
   payload.password = password;
   payload.avatar = avatar;
   payload.coverImage = coverImage;
-  console.log("payload==>>", payload);
+  const accesToken = generateJwtToken(payload);
+  payload.accessToken = accesToken;
   const response = await User.create(payload);
-  console.log(response);
-  return success(response);
-  //   if(!response)
+
+  const resPayload = {};
+  resPayload.username = response.username;
+  resPayload.avatar = response.avatar;
+  resPayload.coverImage = response.coverImage;
+  resPayload.accessToken = response.accessToken;
+  return success(resPayload);
 };
 
 module.exports = { register };
