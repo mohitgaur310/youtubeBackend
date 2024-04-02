@@ -27,7 +27,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
     }
 
     const serviceReg = await register(value, avatar, coverImage);
-    console.log("service reg", serviceReg);
+
     if (!serviceReg?.success)
       return res.status(400).json({ Response: serviceReg });
 
