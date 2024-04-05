@@ -1,4 +1,4 @@
-const { userSchema } = require("../utils/validate.js");
+const { userSchema, loginDetails } = require("../utils/validate.js");
 const { asyncHandler } = require("../utils/asyncHandler");
 const { error } = require("../utils/response.js");
 const uploadOnCloudinary = require("../utils/cloudinary.js");
@@ -11,7 +11,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
     if (error) {
       return res
-        .status(500)
+        .status(400)
         .json({ error: `${error.details[0].message} validation error ` });
     }
     const avatarLocalPath = req.files.avatar[0]?.path;
@@ -32,6 +32,24 @@ const registerUser = asyncHandler(async (req, res, next) => {
       return res.status(400).json({ Response: serviceReg });
 
     return res.status(200).json({ Response: serviceReg });
+  } catch (error) {
+    next(error);
+  }
+});
+
+const loginUser = asyncHandler(async (req, res, next) => {
+  try {
+    // first i have to recive the data from the user
+    // then validate the data
+    // send the data the login sevice and then check if exists
+    // if yes then send the access token and name and username
+    const data = req.body;
+    const { error, value } = loginDetails.validate(data);
+    if (error) {
+      return res
+        .status(400)
+        .json({ error: `${error.details[0].message} validation error ` });
+    }
   } catch (error) {
     next(error);
   }

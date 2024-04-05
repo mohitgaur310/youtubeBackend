@@ -12,4 +12,6 @@ router.route("/register").post(
   registerUser,
 );
 
+router.route("/login").post();
+
 module.exports = router;
