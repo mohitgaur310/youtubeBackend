@@ -3,6 +3,7 @@ const { asyncHandler } = require("../utils/asyncHandler");
 const { error } = require("../utils/response.js");
 const uploadOnCloudinary = require("../utils/cloudinary.js");
 const { register } = require("../service/userService/register");
+const { loginService } = require("../service/userService/login.js");
 const registerUser = asyncHandler(async (req, res, next) => {
   try {
     const data = req.body;
@@ -50,9 +51,13 @@ const loginUser = asyncHandler(async (req, res, next) => {
         .status(400)
         .json({ error: `${error.details[0].message} validation error ` });
     }
+    console.log("value,", value);
+    const serviceResponse = await loginService(value);
+    console.log("sesrvice response", serviceResponse);
+    return serviceResponse;
   } catch (error) {
     next(error);
   }
 });
 
-module.exports = { registerUser };
+module.exports = { registerUser, loginUser };
