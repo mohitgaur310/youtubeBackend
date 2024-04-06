@@ -1,6 +1,6 @@
 const { error, success } = require("../../utils/response.js");
 const User = require("../../models/User.model.js");
-const { generateJwtToken } = require("../../utils/handler.js");
+const { generateJwtToken, bcryptPassword } = require("../../utils/handler.js");
 
 const register = async (value, avatar, coverImage) => {
   const { username, email, fullname, password } = value;
@@ -9,15 +9,15 @@ const register = async (value, avatar, coverImage) => {
     $or: [{ username }, { email }],
   });
 
-  console.log("existing error==>>", existingUsesr);
   if (existingUsesr?.username) {
     return error(400, "user already exists!!");
   }
+
   const payload = {};
   payload.username = username;
   payload.email = email;
   payload.fullname = fullname;
-  payload.password = password;
+  payload.password = await bcryptPassword(password);
   payload.avatar = avatar;
   payload.coverImage = coverImage;
   const accesToken = generateJwtToken(payload);
