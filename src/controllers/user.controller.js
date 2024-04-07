@@ -38,10 +38,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
 const loginUser = asyncHandler(async (req, res, next) => {
   try {
-    // first i have to recive the data from the user
-    // then validate the data
-    // send the data the login sevice and then check if exists
-    // if yes then send the access token and name and username
     const data = req.body;
     const { error, value } = loginDetails.validate(data);
     if (error) {
@@ -49,10 +45,10 @@ const loginUser = asyncHandler(async (req, res, next) => {
         .status(400)
         .json({ error: `${error.details[0].message} validation error ` });
     }
-    console.log("value,", value);
+
     const serviceResponse = await loginService(value);
-    console.log("sesrvice response", serviceResponse);
-    return serviceResponse;
+
+    return res.status(200).json({ Response: serviceResponse });
   } catch (error) {
     next(error);
   }
