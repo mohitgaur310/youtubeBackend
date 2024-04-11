@@ -3,7 +3,9 @@ const { error, success } = require("../../utils/response.js");
 const User = (require = require("../../models/User.model"));
 
 const loginService = async ({ email, password }) => {
-  const existingUsesr = await User.findOne({ email: email });
+  const existingUsesr = await User.findOne({
+    $or: [{ email: email }, { username: email }],
+  });
   if (!existingUsesr) return error(404, "email doesn't exists!!! ");
   console.log("existing user ===>>", existingUsesr);
 
