@@ -45,7 +45,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
     const data = req.body;
     const loginType = data.email.endsWith("@gmail.com");
     let error, value;
-    console.log(loginType);
+
     if (loginType) {
       ({ error, value } = loginEmail.validate(data));
     } else {
