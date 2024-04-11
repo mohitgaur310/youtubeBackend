@@ -7,9 +7,13 @@ const userSchema = Joi.object({
   password: Joi.string().required(),
 });
 
-const loginDetails = Joi.object({
+const loginEmail = Joi.object({
   email: Joi.string().email(),
   password: Joi.string().required(),
 });
 
-module.exports = { userSchema, loginDetails };
+const loginUsername = Joi.object({
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+module.exports = { userSchema, loginEmail, loginUsername };
