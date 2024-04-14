@@ -4,10 +4,11 @@ const {
   loginUsername,
 } = require("../utils/validate.js");
 const { asyncHandler } = require("../utils/asyncHandler");
-const { error } = require("../utils/response.js");
+const { error, success } = require("../utils/response.js");
 const uploadOnCloudinary = require("../utils/cloudinary.js");
 const { register } = require("../service/userService/register");
 const { loginService } = require("../service/userService/login.js");
+const UserModel = require("../models/User.model.js");
 const registerUser = asyncHandler(async (req, res, next) => {
   try {
     const data = req.body;
@@ -58,12 +59,33 @@ const loginUser = asyncHandler(async (req, res, next) => {
         .json({ error: `${error.details[0].message} validation error ` });
     }
 
+    let options = {
+      maxAge: 20 * 60 * 10000,
+      httpOnly: true,
+    };
     const serviceResponse = await loginService(value, loginType);
-
+    res.cookie("accessToken", serviceResponse.data.accessToken, options);
     return res.status(200).json({ Response: serviceResponse });
   } catch (error) {
     next(error);
   }
 });
 
-module.exports = { registerUser, loginUser };
+const logout = asyncHandler(async (req, res) => {
+  console.log("user===>>>", req.user);
+  await UserModel.findByIdAndUpdate(
+    { _id: req.user._id },
+    {
+      $set: { accessToken: undefined },
+    },
+    { new: true },
+  );
+
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  res.send(200).clearCookie("accessToken", options).json(success({}));
+});
+module.exports = { registerUser, loginUser, logout };
