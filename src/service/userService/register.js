@@ -20,15 +20,25 @@ const register = async (value, avatar, coverImage) => {
   payload.password = await bcryptPassword(password);
   payload.avatar = avatar;
   payload.coverImage = coverImage;
-  const accesToken = generateJwtToken(payload);
-  payload.accessToken = accesToken;
+
   const response = await User.create(payload);
 
+  const accesToken = generateJwtToken({ _id: response._id });
+  //   payload.accessToken = accesToken
+  const updateUser = await User.findByIdAndUpdate(
+    { _id: response._id },
+    {
+      $set: { accessToken: accesToken },
+    },
+    {
+      new: true,
+    },
+  );
   const resPayload = {};
   resPayload.username = response.username;
   resPayload.avatar = response.avatar;
   resPayload.coverImage = response.coverImage;
-  resPayload.accessToken = response.accessToken;
+  resPayload.accessToken = updateUser.accessToken;
   return success(resPayload);
 };
 
