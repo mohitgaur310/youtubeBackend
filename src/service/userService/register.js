@@ -1,6 +1,7 @@
 const { error, success } = require("../../utils/response.js");
 const User = require("../../models/User.model.js");
 const { generateJwtToken, bcryptPassword } = require("../../utils/handler.js");
+const { createRefreshToken } = require("../token.service.js");
 
 const register = async (value, avatar, coverImage) => {
   const { username, email, fullname, password } = value;
@@ -24,7 +25,8 @@ const register = async (value, avatar, coverImage) => {
   const response = await User.create(payload);
 
   const accesToken = generateJwtToken({ _id: response._id });
-  //   payload.accessToken = accesToken
+
+  const refreshToken = await createRefreshToken(response._id);
   const updateUser = await User.findByIdAndUpdate(
     { _id: response._id },
     {
@@ -39,6 +41,8 @@ const register = async (value, avatar, coverImage) => {
   resPayload.avatar = response.avatar;
   resPayload.coverImage = response.coverImage;
   resPayload.accessToken = updateUser.accessToken;
+  resPayload.refreshToken = refreshToken;
+
   return success(resPayload);
 };
 

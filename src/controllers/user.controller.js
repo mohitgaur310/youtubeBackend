@@ -35,7 +35,12 @@ const registerUser = asyncHandler(async (req, res, next) => {
     if (!serviceReg?.success)
       return res.status(400).json({ Response: serviceReg });
 
-    return res.status(200).json({ Response: serviceReg });
+    res.cookie("accessToken", serviceReg.result.accessToken);
+    res.cookie("refreshToken", serviceReg.result.refreshToken);
+    const responseWithoutTokens = { ...serviceReg };
+    // find a different way for this task
+    delete responseWithoutTokens.result.refreshToken;
+    return res.status(200).json({ Response: responseWithoutTokens });
   } catch (error) {
     next(error);
   }
