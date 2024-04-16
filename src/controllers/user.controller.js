@@ -37,10 +37,10 @@ const registerUser = asyncHandler(async (req, res, next) => {
 
     res.cookie("accessToken", serviceReg.result.accessToken);
     res.cookie("refreshToken", serviceReg.result.refreshToken);
-    const responseWithoutTokens = { ...serviceReg };
+    const resp = { ...serviceReg };
     // find a different way for this task
-    delete responseWithoutTokens.result.refreshToken;
-    return res.status(200).json({ Response: responseWithoutTokens });
+    delete resp.result.refreshToken;
+    return res.status(200).json({ Response: resp });
   } catch (error) {
     next(error);
   }
@@ -71,7 +71,11 @@ const loginUser = asyncHandler(async (req, res, next) => {
     const serviceResponse = await loginService(value, loginType);
     console.log("serviceResponse", serviceResponse);
     res.cookie("accessToken", serviceResponse.result.accessToken, options);
-    return res.status(200).json({ Response: serviceResponse });
+    res.cookie("refreshToken", serviceResponse.result.refreshToken);
+    const resp = { ...serviceResponse };
+    // find a different way for this task
+    delete resp.result.refreshToken;
+    return res.status(200).json({ Response: resp });
   } catch (error) {
     next(error);
   }
@@ -93,6 +97,10 @@ const logout = asyncHandler(async (req, res) => {
     secure: true,
   };
 
-  res.status(200).clearCookie("accessToken", options).json(success({}));
+  res
+    .status(200)
+    .clearCookie("accessToken", options)
+    .clearCookie("refreshToken", options)
+    .json(success({}));
 });
 module.exports = { registerUser, loginUser, logout };
