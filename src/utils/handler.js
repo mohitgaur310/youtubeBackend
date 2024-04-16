@@ -6,7 +6,7 @@ const generateJwtToken = (payload) => {
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECERT, options);
 };
 
-const generateRefreshToken = () => {
+const generateRefreshToken = (payload) => {
   const options = { expiresIn: process.env.ACCESS_TOKEN_EXPIRY };
   return jwt.sign(payload, process.env.ACCESS_TOKEN_SECERT, options);
 };
