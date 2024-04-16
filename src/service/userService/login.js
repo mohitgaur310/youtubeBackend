@@ -1,8 +1,10 @@
+const { response } = require("express");
 const {
   compareBcryptPassword,
   generateJwtToken,
 } = require("../../utils/handler.js");
 const { error, success } = require("../../utils/response.js");
+const { createRefreshToken, getRefreshToken } = require("../token.service.js");
 const User = (require = require("../../models/User.model"));
 
 const loginService = async ({ email, password }) => {
@@ -11,6 +13,7 @@ const loginService = async ({ email, password }) => {
   });
 
   const accessToken = generateJwtToken({ _id: existingUsesr._id });
+  const refreshToken = getRefreshToken(existingUsesr._id);
   const newUser = await User.findByIdAndUpdate(
     { _id: existingUsesr._id },
     { $set: { accessToken: accessToken } },
@@ -28,6 +31,7 @@ const loginService = async ({ email, password }) => {
     accessToken: newUser.accessToken,
     avatar: newUser.avatar,
     coverImage: newUser.coverImage,
+    refreshToken: refreshToken,
   });
 };
 
