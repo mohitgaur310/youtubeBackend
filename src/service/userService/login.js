@@ -13,7 +13,7 @@ const loginService = async ({ email, password }) => {
   });
 
   const accessToken = generateJwtToken({ _id: existingUsesr._id });
-  const refreshToken = getRefreshToken(existingUsesr._id);
+  const refreshToken = await getRefreshToken(existingUsesr._id);
   const newUser = await User.findByIdAndUpdate(
     { _id: existingUsesr._id },
     { $set: { accessToken: accessToken } },

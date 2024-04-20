@@ -16,7 +16,7 @@ app.use(express.static("public"));
 app.use(cookieParser());
 
 const userRouter = require("./routes/user.routes.js");
-
+const tokenRouter = require("./routes/token.routes.js");
 app.use("/api/v1/user", userRouter);
-
+app.use("/api/v1/token", tokenRouter);
 module.exports = { app };

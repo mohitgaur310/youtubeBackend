@@ -13,6 +13,8 @@ const createRefreshToken = async (id) => {
 
 const getRefreshToken = async (id) => {
   const response = await RefreshToken.find({ user: id });
-  return response.refreshToken;
+  return response[0].refreshToken;
 };
+
+const updateAccessToken = async (id, accessToken) => {};
 module.exports = { createRefreshToken, getRefreshToken };
