@@ -69,7 +69,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
       httpOnly: true,
     };
     const serviceResponse = await loginService(value, loginType);
-    console.log("serviceResponse", serviceResponse);
+
     res.cookie("accessToken", serviceResponse.result.accessToken, options);
     res.cookie("refreshToken", serviceResponse.result.refreshToken);
     const resp = { ...serviceResponse };

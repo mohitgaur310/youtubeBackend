@@ -25,10 +25,11 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
       httpOnly: true,
     };
 
-    res.cookie("accessToken", accessToken, options);
+    res.cookie("accessToken", updated.accessToken, options);
+    res.cookie("refreshToken", incomingRefreshToken, options);
     return res
       .status(200)
-      .json({ success: true, data: { accessToken: accessToken } });
+      .json({ success: true, data: { accessToken: updated.accessToken } });
   } catch (error) {
     next(error);
   }
