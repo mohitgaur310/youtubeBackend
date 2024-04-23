@@ -11,12 +11,11 @@ const refreshAccessToken = asyncHandler(async (req, res, next) => {
       req.cookies.refreshToken || req.body.refreshToken;
     if (!incomingRefreshToken)
       return res.status(400).json({ error: "Unauthorized required" });
-    console.log("incomingRefreshToken", incomingRefreshToken);
     const decodedToken = jwt.verify(
       incomingRefreshToken,
       process.env.REFRESH_TOKEN_SECERT,
     );
-    console.log("decodedToken", decodedToken);
+
     const user = await User.findById(decodedToken._id);
     if (!user) return res.status(400).json({ error: "Unauthorized required" });
     const accessToken = generateJwtToken({ _id: decodedToken._id });
