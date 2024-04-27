@@ -1,11 +1,12 @@
 const { generateRefreshToken } = require("../utils/handler");
 const RefreshToken = require("../models/refreshToken.model");
 const User = require("../models/User.model.js");
+const { create } = require("../dal/dal.js");
 
 const createRefreshToken = async (id) => {
   const refreshToken = generateRefreshToken({ _id: id });
 
-  const response = await RefreshToken.create({
+  const response = await create(RefreshToken, {
     user: id,
     refreshToken: refreshToken,
   });

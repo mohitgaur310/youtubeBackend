@@ -2,7 +2,7 @@ const { error, success } = require("../../utils/response.js");
 const User = require("../../models/User.model.js");
 const { generateJwtToken, bcryptPassword } = require("../../utils/handler.js");
 const { createRefreshToken } = require("../token.service.js");
-
+const { create } = require("../../dal/dal.js");
 const register = async (value, avatar, coverImage) => {
   const { username, email, fullname, password } = value;
 
@@ -22,7 +22,7 @@ const register = async (value, avatar, coverImage) => {
   payload.avatar = avatar;
   payload.coverImage = coverImage;
 
-  const response = await User.create(payload);
+  const response = await create(User, payload);
 
   const accesToken = generateJwtToken({ _id: response._id });
 
