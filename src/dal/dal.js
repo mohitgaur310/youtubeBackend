@@ -2,6 +2,7 @@ const create = async (model, data) => {
   return await model.create(data);
 };
 
+
 // create Many
 const createMany = async (model, body) => {
   return await model.insertMany(body);
